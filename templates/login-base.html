@@ -1,0 +1,31 @@
+{% load i18n static staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'fonts/stylesheet.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Roboto/stylesheet.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %} {% endblock %}</title>
+    {% block style %}{% endblock %}
+</head>
+<body>
+    <div id="preloader" class="hidden">
+        <span>Загрузка</span>
+    </div>
+    {% block content %}{% endblock %}
+    <script src="{% static 'js/jquery-2.2.4.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="{% static 'js/utils/errors.js' %}"></script>
+
+    {% block script %}{% endblock %}
+
+</body>
+</html>
+
+
+
+

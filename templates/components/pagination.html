@@ -1,0 +1,19 @@
+{% load i18n %}
+
+<div class="pagination">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}" class="arrow-left"></a>
+    {% else %}
+        <a href="" class="arrow-left" disabled></a>
+    {% endif %}
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}" class="arrow-right"></a>
+    {% else %}
+        <a href="" class="arrow-right" disabled></a>
+    {% endif %}
+    <span class="page">{% trans 'Стр.' %}</span>
+    <label>
+        <input readonly="readonly" type="text" value="{{ page_obj.number }}">
+    </label>
+    <span class="number">{% trans 'из' %} {{ paginator.num_pages }}</span>
+</div>

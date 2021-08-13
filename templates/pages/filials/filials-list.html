@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Список филиалов' %}{% endblock %}
+
+{% block content %}
+    <main class="filial">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="table-add-staff__content-all">
+                <div class="table-add-staff__content">
+                    <h1>{% trans 'Ваши филиалы' %}</h1>
+                    <div class="table_add-staff">
+                        {% if filials %}
+                            <div class="add-filial__content">
+                                <div class="add-filial__content-inner">
+                                    {% for filial in filials %}
+                                        <a href="{% url 'organizations:filial_detail' org_pk=organization.id filial_pk=filial.id %}" class="filial-block">{{ filial.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="table_not-staff">{% trans 'У Вас пока нет филиалов' %}</div>
+                        {% endif %}
+                        <div class="add-staff__button">
+                            <div class="button">
+                                <a href="{% url 'organizations:filial_create' org_pk=organization.id %}" class="branches-but">{% trans 'Добавить филиал' %}</a>
+                            </div>
+                            {% if not employee_exists %}
+                                <div class="button">
+                                    <a href="{% url 'organizations:departments_list' org_pk=organization.id %}" class="skip">{% trans 'Пропустить' %}</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+
+
+

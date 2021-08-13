@@ -1,0 +1,37 @@
+{% load i18n %}
+
+<h1 class="heading">{% trans 'Текущая активность' %}</h1>
+<div class="table_add-staff">
+    <div class="table_content-all">
+        <div class="table_content">
+            {% if departments %}
+                {% for department in departments %}
+                    <div id="department_{{ department.id }}">
+                        {% include 'components/users_table_tmp.html' %}
+                    </div>
+                    {% if department.user_orgs|length > 5 %}
+                        <div class="button-table__show" id="{{ department.id }}" style="display: block">
+                            <span>{% trans 'Показать все' %}</span>
+                        </div>
+                        <div class="button-table__hide hide_{{ department.id }}" id="hide_{{ department.id }}" style="display: none;">
+                            <span>{% trans 'Скрыть' %}</span>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <div class="table_not-staff">{% trans 'У Вас пока нет отделов' %}</div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="add-staff__button">
+        <div class="button">
+            <a href="{% url 'organizations:employee_create' org_pk=organization.id %}" class="staff-but">{% trans 'Добавить сотрудника' %}</a>
+        </div>
+        <div class="button">
+            <a href="{% url 'organizations:filial_create' org_pk=organization.id %}" class="branches-but">{% trans 'Добавить филиал' %}</a>
+        </div>
+        <div class="button">
+            <a href="{% url 'organizations:department_create' org_pk=organization.id %}" class="departments-but">{% trans 'Добавить отдел' %}</a>
+        </div>
+    </div>
+</div>

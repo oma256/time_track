@@ -1,0 +1,6 @@
+{% for filial in filials %}
+    <div class="radio" id="{{ filial.id }}">
+        <input type="radio" filial_id="{{ filial.id }}" id="radio{{ filial.id }}" name="radio">
+        <label for="radio{{ filial.id }}">{{ filial.name }}</label>
+    </div>
+{% endfor %}

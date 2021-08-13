@@ -1,0 +1,224 @@
+.left {
+  .left-inner {
+    position: sticky;
+    top: 0;
+    bottom: 0;
+  }
+  .logo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 11px 16px 24px;
+    margin: 0 0 27px 0;
+    background: #6A4B93;
+
+    .logo-img {
+      width: 123px;
+      margin: 0 10px 0 0;
+
+      @media(max-width: 960px) {
+        display: none;
+      }
+    }
+
+    .button-hide {
+      width: 24px;
+      min-width: 24px;
+      height: 24px;
+      background: url("../img/svg/hide.svg") center no-repeat;
+      cursor: pointer;
+      transition: .2s;
+
+      @media(max-width: 960px) {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .menu {
+    padding: 0 0 50px 0;
+
+    .border {
+      border-bottom: 1px solid #6A4B93;
+      margin: 0 24px;
+    }
+
+    ul {
+      padding: 0 12px;
+
+      li > div {
+        position: absolute;
+        top: calc(50% - 12px);
+        left: 12px;
+        width: 24px;
+        height: 24px;
+        margin: 0 16px 0 0;
+        transition: .2s;
+      }
+
+      li {
+        position: relative;
+        display: flex;
+        align-items: center;
+        margin: 0 0 15px 0;
+
+        &:hover {
+          background: #6A4B93;
+          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
+          border-radius: 4px;
+
+          .home {
+            background: url("../img/svg/home2.svg") center no-repeat;
+          }
+
+          .staff {
+            background: url("../img/svg/staff2.svg") center no-repeat;
+          }
+
+          .branches {
+            background: url("../img/svg/branches2.svg") center no-repeat;
+          }
+
+          .departments {
+            background: url("../img/svg/departmens2.svg") center no-repeat;
+          }
+
+          .reports {
+            background: url("../img/svg/reports2.svg") center no-repeat;
+          }
+
+          .settings {
+            background: url("../img/svg/settings2.svg") center no-repeat;
+          }
+        }
+
+
+        a {
+          position: relative;
+          font-weight: normal;
+          font-size: 14px;
+          line-height: 17px;
+          color: #FFFFFF;
+          transition: .2s;
+          padding: 12px 15px 12px 50px;
+          width: 100%;
+          box-sizing: border-box;
+
+          @media(max-width: 960px) {
+            color: transparent;
+            padding: 12px 0 12px 50px;
+          }
+        }
+
+        .home {
+          background: url("../img/svg/home.svg") center no-repeat;
+        }
+
+        .staff {
+          background: url("../img/svg/staff.svg") center no-repeat;
+        }
+
+        .branches {
+          background: url("../img/svg/branches.svg") center no-repeat;
+        }
+
+        .departments {
+          background: url("../img/svg/departmens.svg") center no-repeat;
+        }
+
+        .reports {
+          background: url("../img/svg/reports.svg") center no-repeat;
+        }
+
+        .settings {
+          background: url("../img/svg/settings.svg") center no-repeat;
+        }
+      }
+
+      .active {
+        background: #6A4B93;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.03);
+        border-radius: 4px;
+
+        .home {
+          background: url("../img/svg/home2.svg") center no-repeat;
+        }
+
+        .staff {
+          background: url("../img/svg/staff2.svg") center no-repeat;
+        }
+
+        .branches {
+          background: url("../img/svg/branches2.svg") center no-repeat;
+        }
+
+        .departments {
+          background: url("../img/svg/departmens2.svg") center no-repeat;
+        }
+
+        .reports {
+          background: url("../img/svg/reports2.svg") center no-repeat;
+        }
+
+        .settings {
+          background: url("../img/svg/settings2.svg") center no-repeat;
+        }
+      }
+
+      .disabled {
+        border-radius: 4px;
+        overflow: hidden;
+        pointer-events: none;
+
+        &:after {
+          content: "";
+          position: absolute;
+          z-index: 20;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          left: 0;
+          background: rgba(0, 0, 0, 0.2);
+        }
+      }
+    }
+  }
+}
+
+
+.show-menu {
+  width: 72px;
+  min-width: 72px;
+
+  @media(max-width: 960px) {
+    width: 180px;
+  }
+
+  .menu ul li a {
+    color: transparent;
+    padding: 12px 0 12px 50px;
+
+    @media(max-width: 960px) {
+      color: #FFFFFF;
+      padding: 12px 15px 12px 50px;
+    }
+  }
+
+  .logo .logo-img {
+    display: none;
+
+    @media(max-width: 960px) {
+      display: block;
+    }
+  }
+
+  .logo .button-hide {
+    transform: rotate(180deg);
+
+    @media(max-width: 960px) {
+      transform: rotate(0deg);
+    }
+  }
+}
+
+

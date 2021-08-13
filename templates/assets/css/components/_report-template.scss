@@ -1,0 +1,57 @@
+.report-template {
+  position: absolute;
+  z-index: 1000;
+  top: 0;
+  background: #FFFFFF;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: none;
+
+  &.show {
+    display: block;
+  }
+
+  h1 {
+    text-align: center;
+  }
+
+  .reports-detail__content {
+    margin: 0!important;
+  }
+
+  .table_add-staff {
+    max-height: 100vh;
+    overflow-y: auto;
+
+    .table_content-all {
+      margin: 50px auto;
+
+      .table {
+        border-radius: 0;
+
+        th, td {
+          border: 1px solid #000000;
+        }
+
+        tr {
+          &:first-child {
+            background: #FFFFFF;
+
+            th {
+              span {
+                &:after {
+                  display: none;
+                }
+              }
+            }
+          }
+
+          th, td {
+            padding: 0 16px;
+          }
+        }
+      }
+    }
+  }
+}

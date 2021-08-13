@@ -1,0 +1,40 @@
+{% load static staticfiles i18n %}
+
+<div class="right-header">
+    <div class="search-block">
+        <form action="">
+            <div class="input {% if org_tariff_pkg_is_not_payed %}disabled{% endif %}">
+                <input type="text" id="global_search_input_id" placeholder="{% trans 'Поиск' %}">
+                <div class="searchBut"></div>
+                <div class="close-search"></div>
+                <div class="search-result__content" id="search-result__content_id">
+                    {% include 'components/global_search_result_users_list.html' %}
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="rates-and-admin">
+        <a href="{% url 'organizations:tariffs' org_pk=organization.id %}">
+            <div class="rates-button">
+                <span>{% trans 'Тарифы' %}</span>
+            </div>
+        </a>
+        <div class="admin-dropdown">
+            <div class="dropdown-button">
+                <div class="admin-img">
+                    <img src="{% static 'img/svg/admin.svg' %}" alt="load img">
+                </div>
+                <div class="dropdown-button__inner">
+                    <div class="name">{% if request.user.get_first_name %}{{ request.user.get_first_name }}{% else %}
+                        {% trans 'Пользователь' %}{% endif %}</div>
+                    <div class="info">{% trans 'Админ' %}</div>
+                </div>
+            </div>
+            <div class="dropdown-content">
+                <div class="dropdown-content__inner">
+                    <a href="{% url 'users:logout' %}">{% trans 'Выйти' %}</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

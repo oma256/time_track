@@ -1,0 +1,38 @@
+
+.add-filial {
+
+  .add-employee__content {
+    max-width: 368px;
+    width: 100%;
+  }
+
+  .table_add-staff {
+    justify-content: space-between;
+
+    .add-staff__button {
+      margin: 29px 0 0 0;
+    }
+  }
+}
+
+.add-filial__input {
+  max-width: 368px;
+  width: 100%;
+
+  input {
+    width: 100%;
+    border: 1px solid #F1F1F1;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: 11px 12px 8px;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 17px;
+    color: #374257;
+    outline: none;
+
+    &::placeholder {
+      color: #A5ADBC;
+    }
+  }
+}

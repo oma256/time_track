@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Тарифы' %}{% endblock %}
+
+{% block content %}
+    <main class="tariffs">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="">
+                <h1>{% trans 'Тарифы' %}</h1>
+                {% if current_tariff_package %}
+                    <div class="current-tariff">
+                        <h3>{% trans 'Ваш текущий пакет' %} "{{ current_tariff_package.package.tariff.name }} / {{ current_tariff_package.package.month_duration }} {% trans 'месяца' %}"</h3>
+                        <p>{% trans 'Пакет можно продлить, нажав кнопку ниже “Оплатить”' %}</p>
+                        <div class="tariffs-row"> {% trans 'Стоимость тарифа:' %}
+                            <span>
+                                {% if current_tariff_package.package.discount %}
+                                    {{ current_tariff_package.package.get_discount }}
+                                {% else %}
+                                    {{ current_tariff_package.package.price }}
+                                {% endif %} сом
+                            </span>
+                        </div>
+                        <div class="tariffs-row"> {% trans 'До оплаты осталось:' %} <span class="day">{{ current_tariff_package.duration_days_count }} {% trans 'дней' %}</span></div>
+                        <a style="cursor: pointer" tariff_pkg_id="{{ current_tariff_package.package.id }}" org_id="{{ current_tariff_package.organization.id }}" id="create-payment_id">{% trans 'Оплатить' %}</a>
+                    </div>
+                {% endif %}
+                <div class="tariffs-content">
+                    <h2>{% trans 'Начните пользоваться бесплатным, пробным периодом на неограниченное количество сотрудников, сроком 14 дней.' %}</h2>
+                    <div class="tariffs-table__parent">
+                        <div class="tariffs-table">
+                            <table>
+                                <tr>
+                                    <th>
+                                        <span>{% trans 'Пакет' %}</span>
+                                    </th>
+                                    {% for tariff in tariffs %}
+                                        <th>
+                                            <span>{{ tariff.name }}</span>
+                                        </th>
+                                    {% endfor %}
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <span>{% trans 'Стоимость' %}</span>
+                                    </td>
+                                    {% for tariff in tariffs %}
+                                        <td class="modal-open_js">
+                                            <div class="tariffs-sum">
+                                                <div class="sum">{{ tariff.month_price }} сом/мес</div>
+                                                <a id="{{ tariff.id }}" class="choice_tariff_btn_class">{% trans 'Выбрать' %}</a>
+                                            </div>
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="tariffs-feedback">
+                        <p>{% trans 'Свыше 100 сотрудников оставьте Ваши контакты и мы с Вами свяжемся' %}</p>
+                        <form action="">
+                            {% csrf_token %}
+                            <div class="input-block">
+                                <div class="input">
+                                    {{ form.phone }}
+                                    <div class="num-code">+996</div>
+                                </div>
+                                <button id="feedback-btn_id" style="cursor: pointer; background: #A5ADBC;" type="button">{% trans 'Жду звонка' %}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="tariff_model_id">
+            {% include 'components/tariffs_modal.html' %}
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.maskedinput/1.4.1/jquery.maskedinput.min.js"></script>
+    <script src="{% static 'js/utils/cookie.js' %}"></script>
+    <script src="{% static 'js/form_input_mask.js' %}"></script>
+    <script src="{% static 'js/utils/phone_fields.js' %}"></script>
+    <script src="{% static 'js/tariffs/tariffs.js' %}"></script>
+    <script src="{% static 'js/tariffs/tariffs_modal.js' %}"></script>
+    <script>
+        if (debug === 'True') {
+          tariffDetailUrl = '{{ request.scheme }}://{{ request.get_host }}{% url 'organizations:tariff_detail' org_pk=organization.pk %}';
+        } else {
+          tariffDetailUrl = 'https://worktime.kg{% url 'organizations:tariff_detail' org_pk=organization.pk %}';
+        }
+        const feedbackCreateUrl = '{% url 'organizations:feedback' org_pk=organization.pk %}';
+        const createPaymentUrl = '{% url "payment:payment_create" %}';
+        const organizationId = '{{ organization.id }}';
+    </script>
+{% endblock %}

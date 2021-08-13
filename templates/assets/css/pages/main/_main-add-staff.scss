@@ -1,0 +1,366 @@
+
+.table {
+  border-collapse: collapse;
+  overflow: hidden;
+  border-radius: 8px;
+  margin: 0 0 30px 0;
+
+  @media(max-width: 768px) {
+    width: 632px;
+  }
+
+  tr {
+    height: 56px;
+    overflow: hidden;
+    transition: .2s;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    td {
+      position: relative;
+    }
+
+    a {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+    }
+
+    &:first-child {
+
+    }
+  }
+
+  th {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #374257;
+    text-align: left;
+    box-sizing: border-box;
+    border: none;
+    padding: 0 16px 0 0;
+
+    span {
+      display: inline-flex;
+      align-items: center;
+
+      &:after {
+        content: "";
+        width: 9px;
+        min-width: 9px;
+        height: 14px;
+        margin: 0 0 0 16px;
+        background: url("../img/svg/staff-arrow.svg") center no-repeat;
+        background-size: contain;
+      }
+    }
+
+    &:first-child {
+      width: 128px;
+      padding: 0 16px;
+    }
+
+    &:nth-child(2) {
+      width: 271px;
+    }
+
+    &:nth-child(3) {
+      width: 124px;
+    }
+
+    &:nth-child(4) {
+      width: 113px;
+    }
+
+    &:last-child {
+      width: 85px;
+    }
+  }
+}
+
+
+.table_not-staff {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 105px;
+  max-width: 565px;
+  width: 100%;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 22px;
+  color: #A5ADBC;
+}
+
+.table_content {
+  position: relative;
+  display: inline-block;
+  background: #FCFCFC;
+  border-radius: 8px;
+  margin: 0 0 48px 0;
+
+  &:last-child {
+
+    .button-table__show, .button-table__hide {
+      border: none;
+    }
+  }
+
+  @media(max-width: 768px) {
+    overflow: auto;
+  }
+
+  .button-table__show, .button-table__hide {
+    text-align: right;
+    padding: 0 0 30px 0;
+    border-bottom: 1px solid #E5E5E5;
+
+    span {
+      display: inline-flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17px;
+      color: #374257;
+      background: #FFD233;
+      border-radius: 4px;
+      padding: 10px 16px 9px;
+      cursor: pointer;
+
+      &:after {
+        content: "";
+        width: 16px;
+        min-width: 16px;
+        height: 13px;
+        margin-left: 15px;
+        background: url("../img/svg/arrow-down2.svg") center no-repeat;
+        background-size: contain;
+      }
+    }
+  }
+
+  .button-table__hide {
+    span {
+      &:after {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+}
+
+.table_content > h2 {
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #374257;
+  margin: 20px 0 14px;
+}
+
+.add-staff__button {
+  padding: 0 0 0 46px;
+
+  @media (max-width: 1200px) {
+    padding: 0 0 0 23px;
+  }
+
+  @media(max-width: 960px) {
+    display: flex;
+    padding: 0 0 20px 0;
+  }
+
+  @media(max-width: 640px) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .button {
+    display: flex;
+    align-items: center;
+    margin: 0 0 4px 0;
+    width: 100%;
+    max-width: 240px;
+    background: #6A4B93;
+    border-radius: 4px;
+
+    @media(max-width: 960px) {
+      margin: 0 10px 0 0;
+
+      &:last-child {
+        margin: 0;
+      }
+    }
+
+    @media(max-width: 640px) {
+      margin: 0 0 10px 0;
+
+      &:last-child {
+        margin: 0 0 10px 0;
+      }
+    }
+
+    a {
+      display: flex;
+      font-weight: normal;
+      font-size: 14px;
+      line-height: 17px;
+      color: #FFFFFF;
+      padding: 10px 19px 10px 10px;
+      box-sizing: border-box;
+
+      @media(max-width: 640px) {
+        height: auto;
+      }
+
+
+      &:before {
+        content: "";
+        width: 16px;
+        min-width: 16px;
+        height: 16px;
+        margin: 0 12px 0 0;
+      }
+    }
+
+    .skip {
+      &:before {
+        background: url("../img/svg/skip-arrow.svg") center no-repeat;
+      }
+    }
+
+    .staff-but {
+      &:before {
+        background: url("../img/svg/staff-but.svg") center no-repeat;
+      }
+    }
+
+    .branches-but {
+      &:before {
+        background: url("../img/svg/branches-but.svg") center no-repeat;
+      }
+    }
+
+    .departments-but {
+      &:before {
+        background: url("../img/svg/departments-but.svg") center no-repeat;
+      }
+    }
+
+    .import-staff {
+      &:before {
+        background: url("../img/svg/import-but.svg") center no-repeat;
+      }
+    }
+
+    .admin-but {
+      &:before {
+        background: url("../img/svg/admin-but.svg") center no-repeat;
+      }
+    }
+  }
+}
+
+
+.table-add-staff__content {
+
+}
+
+.table_add-staff {
+  display: flex;
+
+  @media(max-width: 960px) {
+    flex-direction: column-reverse;
+  }
+
+  .table_content-all {
+    display: flex;
+    flex-direction: column;
+    max-width: 722px;
+    width: 100%;
+  }
+
+
+  .table_content {
+    background: transparent;
+  }
+
+  table {
+
+    tr {
+
+      td {
+        &:first-child {
+
+          span {
+          }
+        }
+      }
+
+      &:nth-child(2n) {
+
+        td {
+          &:first-child {
+
+            span {
+            }
+          }
+        }
+      }
+
+      &:first-child {
+        background: #F1F6FF;
+      }
+    }
+
+    td {
+      font-weight: normal;
+      font-size: 13px;
+      line-height: 16px;
+      color: #374257;
+      padding: 0 16px 0 0;
+
+      .info {
+        font-weight: 300;
+        font-size: 12px;
+        line-height: 14px;
+        color: #8094BB;
+        margin: 4px 0 0 0;
+      }
+
+      &:first-child {
+        padding: 0 16px;
+
+        span {
+          display: block;
+          width: 8px;
+          min-width: 8px;
+          height: 8px;
+          min-height: 8px;
+          border-radius: 50%;
+          margin: 0 0 0 30px;
+        }
+      }
+
+      &:nth-child(2) {
+      }
+
+      &:nth-child(3) {
+
+      }
+
+      &:nth-child(4) {
+
+      }
+
+      &:last-child {
+
+      }
+    }
+  }
+}

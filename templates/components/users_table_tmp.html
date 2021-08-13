@@ -1,0 +1,80 @@
+{% load i18n tz %}
+
+
+<h2>{{ department.name }}</h2>
+<table class="table">
+    {% if department.user_orgs %}
+        <tr>
+            <th>
+                <span>{% trans 'Статус' %}</span>
+            </th>
+            <th>
+                <span>{% trans 'Сотрудник' %}</span>
+            </th>
+            <th>
+                <span>{% trans 'Пришел' %}</span>
+            </th>
+            <th>
+                <span>{% trans 'Ушел' %}</span>
+            </th>
+            <th>
+                <span>{% trans 'Дата' %}</span>
+            </th>
+        </tr>
+        {% if is_hide %}
+            {% for user_org in department.user_orgs %}
+                <tr class="{% if user_org.is_checked %}row-green{% else %}row-red{% endif %}">
+                    <td>
+                        <span></span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.user.get_full_name }}</span>
+                        <div class="info" style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.position }}</div>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %} {{ user_org.last_work_time.start_time|time:'H:i' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time.end_time %} -/- {% else %} {{ user_org.last_work_time.end_time|time:'H:i' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %} {{ user_org.last_work_time.start_time|date:'d.m.y' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            {% for user_org in department.user_orgs|slice:5 %}
+                <tr class="{% if user_org.is_checked %}row-green{% else %}row-red{% endif %}">
+                    <td>
+                        <span></span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.user.get_full_name }}</span>
+                        <div class="info" style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.position }}</div>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %} {{ user_org.last_work_time.start_time|time:'H:i' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time.end_time %} -/- {% else %} {{ user_org.last_work_time.end_time|time:'H:i' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                    <td>
+                        <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %} {{ user_org.last_work_time.start_time|date:'d.m.y' }} {% endif %}</span>
+                         <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% endif %}
+    {% else %}
+        <div class="table_not-staff">{% trans 'В отделе пока нет сотрудников' %}</div>
+    {% endif %}
+</table>

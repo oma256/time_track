@@ -1,0 +1,12 @@
+{% for user_org in user_orgs %}
+    <div class="input-result">
+        <div>
+            <div class="name">{{ user_org.user.get_full_name }}</div>
+            <div class="info">{{ user_org.position }}</div>
+        </div>
+        <div>
+            <input type="radio" user_id="{{ user_org.user.id }}" name="checkbox" id="checkbox_{{ user_org.user.id }}">
+            <label for="checkbox_{{ user_org.user.id }}"></label>
+        </div>
+    </div>
+{% endfor %}

@@ -1,0 +1,57 @@
+{% load static staticfiles i18n %}
+
+<h2>{% trans 'Регистрация' %}</h2>
+<form action="{% url 'users:registration' %}" method="post" id="register-form">
+    {% csrf_token %}
+    <div class="password-input">
+        <label>
+            {{ form.phone_number }}
+        </label>
+        {% if form.phone_number.errors %}
+            <p>
+                {% for error in form.phone_number.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+    <div class="password-input">
+        <label>
+            {{ form.org_name }}
+        </label>
+        {% if form.org_name.errors %}
+            <p>
+                {% for error in form.org_name.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+    <div class="password-input">
+        <label>
+            {{ form.password }}
+        </label>
+        {% if form.password.errors %}
+            <p>
+                {% for error in form.password.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+    <div class="password-input">
+        <label>
+            {{ form.password2 }}
+        </label>
+        {% if form.password2.errors %}
+            <p>
+                {% for error in form.password2.errors %}
+                    {{ error|escape }}
+                {% endfor %}
+            </p>
+        {% endif %}
+    </div>
+    <div class="login-button">
+        <a id="registration-button" class="send-button">{% trans 'Регистрация' %}</a>
+    </div>
+</form>

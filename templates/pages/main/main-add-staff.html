@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Главная' %}{% endblock %}
+
+{% block content %}
+    <main class="main">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="table-add-staff__content">
+                {% if filials_exists %}
+                    {% include 'components/main_emplyees_of_filials.html' %}
+                {% elif departments_exists %}
+                    {% include 'components/main_emplyees_of_departments.html' %}
+                {% else %}
+                    {% include 'components/main_emplyees_without_sub_orgs.html' %}
+                {% endif %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}
+    <script>
+        const filialsEndpoint = '{% url "organizations:user_orgs" %}';
+        const orgID = '{{ organization.id }}';
+    </script>
+    <script src="{% static 'js/utils/cookie.js' %}"></script>
+    <script src="{% static 'js/main/main_filials_component.js' %}"></script>
+{% endblock %}

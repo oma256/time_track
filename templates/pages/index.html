@@ -1,0 +1,54 @@
+{% extends 'login-base.html' %}
+{% load static staticfiles i18n %}
+
+{% block content %}
+    <div class="body-login-container" style="background-image: url({% static 'img/jpg/sign-in.jpg' %})">
+        <div class="login-container">
+            <div class="logo">
+                <img src="{% static 'img/png/лого.png' %}" alt="">
+            </div>
+            <div class="register">
+                <h2>Вход</h2>
+                <a href="{% url 'users:registration' %}">Регистрация</a>
+            </div>
+            <form action="{% url 'users:login' %}" method="POST">
+                {% csrf_token %}
+                <div class="password-input">
+                    <label>
+                        {{ form.phone_number }}
+                    </label>
+                    {% if form.phone_number.errors %}
+                        <p>
+                            {% for error in form.phone_number.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="password-input">
+                    <label>
+                        {{ form.password }}
+                    </label>
+                    {% if form.password.errors %}
+                        <p>
+                            {% for error in form.password.errors %}
+                                {{ error|escape }}
+                            {% endfor %}
+                        </p>
+                    {% endif %}
+                </div>
+                <div class="login-button">
+                    <button type="submit">{% trans 'Войти' %}</button>
+                </div>
+            </form>
+            <div class="forgot-password register">
+                <a href="{% url 'users:forgot_password' %}">{% trans 'Забыли пароль?' %}</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://unpkg.com/imask"></script>
+    <script src="{% static 'js/phone_input_mask.js' %}"></script>
+{% endblock %}

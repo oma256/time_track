@@ -1,0 +1,48 @@
+
+.filial {
+
+  .table_add-staff {
+    justify-content: space-between;
+  }
+
+  .add-filial__content {
+    max-width: 758px;
+    width: 100%;
+
+    .add-filial__content-inner {
+      border: 2px solid #E3E8F0;
+      border-radius: 8px;
+      margin: 0 98px 0 0;
+      max-width: 658px;
+      width: 100%;
+
+      .filial-block {
+        font-weight: normal;
+        font-size: 13px;
+        line-height: 16px;
+        display: flex;
+        align-items: center;
+        color: #374257;
+        padding: 0 14px;
+        height: 56px;
+        border-bottom: 2px solid #E3E8F0;
+        transition: .2s;
+
+        &:last-child {
+          border: none;
+        }
+
+        &:hover {
+          background: rgba(98, 148, 243, 0.3);
+          color: #6294F3;
+        }
+      }
+    }
+  }
+
+}
+
+
+
+
+

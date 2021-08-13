@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}search-result{% endblock %}
+
+{% block content %}
+    <main class="reports">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="">
+                <h1>Результаты поиска (156)</h1>
+                <div class="reports-all">
+                    <div class="reports-content-all">
+                        <div class="reports-content">
+                            <div class="reports-table">
+                                <div class="table-heading">
+                                    <div class="name">Ф.И.О.</div>
+                                    <div class="info">Должность</div>
+                                    <div class="reports-icon">Отчет</div>
+                                </div>
+                                <div class="table-content">
+                                    <div class="name">Асанкулов Манас</div>
+                                    <div class="info">Зав.склад</div>
+                                    <div class="reports-icon">
+                                        <div></div>
+                                    </div>
+                                </div>
+                                <div class="table-content">
+                                    <div class="name">Асанкулов Манас</div>
+                                    <div class="info">Зав.склад</div>
+                                    <div class="reports-icon">
+                                        <div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% include 'components/pagination.html' %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script>
+        $(function () {
+            $.datepicker.setDefaults($.datepicker.regional["ru"]);
+            $('#date_range').datepicker({
+                dateFormat: 'dd.mm.yy',
+                range: 'period',
+                numberOfMonths: 2,
+                showOtherMonths: true,
+
+                onSelect: function (dateText, inst, extensionRange) {
+                    $('[name=startDate]').val(extensionRange.startDateText);
+                    $('[name=endDate]').val(extensionRange.endDateText);
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Отделы' %}{% endblock %}
+
+{% block content %}
+    <main class="filial">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="table-add-staff__content-all">
+                <div class="table-add-staff__content">
+                    <h1>{% trans 'Отделы' %}</h1>
+                    <div class="table_add-staff">
+                        {% if departments %}
+                            <div class="add-filial__content">
+                                <div class="add-filial__content-inner">
+                                    {% for department in departments %}
+                                        <a href="{% url 'organizations:department_detail' org_pk=organization.id depart_pk=department.id %}"
+                                           class="filial-block">{{ department.name }}</a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="table_not-staff">{% trans 'У Вас пока нет отделов' %}</div>
+                        {% endif %}
+                        <div class="add-staff__button">
+                            <div class="button">
+                                <a href="{% url 'organizations:department_create' org_pk=organization.id %}"
+                                   class="departments-but">{% trans 'Добавить отдел' %}</a>
+                            </div>
+                            {% if not employee_exists %}
+                                <div class="button">
+                                    <a href="{% url 'organizations:employees_list' org_pk=organization.id %}" class="skip">{% trans 'Пропустить' %}</a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

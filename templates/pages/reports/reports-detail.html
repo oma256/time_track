@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Отчет сотрудника' %}{% endblock %}
+
+{% block content %}
+    <main class="reports-detail">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="reports-detail__content">
+                <div class="table_add-staff">
+                    <div class="table_content-all">
+                        <div class="table_content">
+                            <div class="reports-detail__info">
+                                <div>
+                                    <div class="name">{% trans 'Ф.И.О.' %}:</div>
+                                    <div class="info">{{ user_org.user.get_full_name }}</div>
+                                </div>
+                                <div>
+                                    <div class="name">{% trans 'Должность' %}:</div>
+                                    <div class="info">{{ user_org.position }}</div>
+                                </div>
+                                {% if user_org.organization.is_department %}
+                                    <div>
+                                        <div class="name">{% trans 'Филиал' %}:</div>
+                                        <div class="info">{{ user_org.organization.parent_org.name }}</div>
+                                    </div>
+                                    <div>
+                                        <div class="name">{% trans 'Отдел' %}:</div>
+                                        <div class="info">{{ user_org.organization.name }}</div>
+                                    </div>
+                                {% elif user_org.organization.parent_org %}
+                                    <div>
+                                        <div class="name">{% trans 'Филиал' %}:</div>
+                                        <div class="info">{{ user_org.organization.name }}</div>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <div class="name">{% trans 'Филиал' %}:</div>
+                                        <div class="info">{{ user_org.organization.name }}</div>
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <table class="table">
+                                <tr>
+                                    <th>
+                                        <span>{% trans 'День недели' %}</span>
+                                    </th>
+                                    <th>
+                                        <span>{% trans 'Дата' %}</span>
+                                    </th>
+                                    <th>
+                                        <span>{% trans 'Пришел' %}</span>
+                                    </th>
+                                    <th>
+                                        <span>{% trans 'Ушел' %}</span>
+                                    </th>
+                                    <th>
+                                        <span>{% trans 'Кол-во часов' %}</span>
+                                    </th>
+                                </tr>
+                                {% for work_time in work_times %}
+                                    <tr>
+                                        <td>
+                                            <span>{{ work_time.start_time|date:'l' }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ work_time.start_time|date:'d.m.y' }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{{ work_time.start_time|time:'H:i' }}</span>
+                                        </td>
+                                        <td>
+                                            <span>{% if work_time.end_time %}
+                                                {{ work_time.end_time|time:'H:i' }} {% else %} -/- {% endif %} </span>
+                                        </td>
+                                        <td>
+                                            <span>{% if work_time.hour_duration %} {{ work_time.hour_duration }}
+                                                {% trans 'ч.' %} &nbsp; {{ work_time.minute_duration }}
+                                                {% trans 'мин.' %} {% else %} -/- {% endif %}</span>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
+                    <div class="reports-calendar">
+                        <form action="">
+                            <div class="form-content">
+                                <a class="excel print" id="print-btn_id" href="#">{% trans 'Распечатать' %}</a>
+                                <a class="excel" id="download-btn_id" href="#">{% trans 'Скачать Excel' %}</a>
+                                <a class="excel edit"
+                                   href="{% url 'organizations:employee_edit' org_pk=organization.pk user_org_pk=user_org.pk %}">{% trans 'Редактировать' %}</a>
+                                <div class="input">
+                                    <input name="startDate" style="cursor: pointer" class="start-date"
+                                           readonly="readonly" id="date_range"
+                                           placeholder="{% trans 'Выберите период' %}">
+                                    <input name="endDate" style="cursor: pointer" class="end-date" readonly="readonly">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% include 'components/pagination.html' %}
+            </div>
+        </div>
+        <div class="report-template" id="report_template_block_id">
+            {% include 'components/report-template.html' %}
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/utils/cookie.js' %}"></script>
+    <script src="{% static 'js/reports/report_detail.js' %}"></script>
+    <script>
+        $(() => {
+            $.datepicker.setDefaults($.datepicker.regional["ru"]);
+            $('#date_range').datepicker({
+                dateFormat: 'yy-mm-dd',
+                range: 'period',
+                showButtonPanel: true,
+                numberOfMonths: 2,
+                showOtherMonths: true,
+                beforeShow: (input, inst) => {
+                    let cal = inst.dpDiv;
+                    let top = $(input).offset().top + $(input).outerHeight();
+                    setTimeout(function () {
+                        cal.css({
+                            'top': top,
+                        });
+                    }, 10);
+                },
+                onSelect: (dateText, inst, extensionRange) => {
+                    $('[name=startDate]').val(extensionRange.startDateText);
+                    $('[name=endDate]').val(extensionRange.endDateText);
+                    startTime = extensionRange.startDateText;
+                    endTime = extensionRange.endDateText;
+                }
+            });
+
+            // объект расширения (хранит состояние календаря)
+            const extensionRange = $('#date_range').datepicker(
+                'widget'
+            ).data('datepickerExtensionRange');
+
+            if (extensionRange.startDateText) {
+                $('[name=startDate]').val(extensionRange.startDateText);
+            }
+            if (extensionRange.endDateText) {
+                $('[name=endDate]').val(extensionRange.endDateText);
+            }
+        });
+
+        if (debug === 'True') {
+          reportDownloadUrl = '{{ request.scheme }}://{{ request.get_host }}{% url "organizations:report_download" org_pk=organization.id user_org_id=user_org.id %}';
+          reportPrintUrl = '{{ request.scheme }}://{{ request.get_host }}{% url "organizations:report_print" org_pk=organization.id user_org_id=user_org.id %}';
+        } else {
+          reportDownloadUrl = 'https://worktime.kg{% url "organizations:report_download" org_pk=organization.id user_org_id=user_org.id %}';
+          reportPrintUrl = 'https://worktime.kg{% url "organizations:report_print" org_pk=organization.id user_org_id=user_org.id %}';
+        }
+    </script>
+{% endblock %}

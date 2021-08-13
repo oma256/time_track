@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Импортировать сотрудников' %}{% endblock %}
+
+{% block content %}
+    <main class="import-staff">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="import-staff__content">
+                <h1>{% trans 'Импортировать сотрудников' %}</h1>
+                <h2>{% trans 'Загрузите список всех сотрудников за 4 шага' %}</h2>
+                <div class="import-staff__content-inner">
+                    <div class="card-all">
+                        <div class="card">
+                            <div class="card-inner">
+                                <div class="num">1</div>
+                                <p>{% trans 'Скачайте шаблон списка сотрудников' %}</p>
+                                <div class="import-staff__img">
+                                    <img src="{% static 'img/svg/card1.svg' %}" alt="load img">
+                                </div>
+                                <a id="download_template_btn_id" class="download" style="cursor: pointer">{% trans 'Скачать' %}</a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-inner">
+                                <div class="num">2</div>
+                                <p>{% trans 'Заполните шаблон строго по форме' %}</p>
+                                <div class="import-staff__img">
+                                    <img src="{% static 'img/svg/card2.svg' %}" alt="load img">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-inner">
+                                <div class="num">3</div>
+                                <p>{% trans 'Выберите заполненый шаблон' %}</p>
+                                <div class="import-staff__img">
+                                    <img src="{% static 'img/svg/card2.svg' %}" alt="load img">
+                                </div>
+                                <a id="choice_template_btn_id" class="import" style="cursor: pointer; position: relative">{% trans 'Выбрать' %}
+                                    <input style="position: absolute; top: 0; bottom: 0; right: 0; left: 0; opacity: 0; cursor: pointer; width: 100%" type="file" id="file-selector" accept="application/vnd.sealed.xls" multiple>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-inner">
+                                <div class="num">4</div>
+                                <p>{% trans 'Загрузите заполненный шаблон' %}</p>
+                                <div class="import-staff__img">
+                                    <img src="{% static 'img/svg/card3.svg' %}" alt="load img">
+                                </div>
+                                <a class="import disabled-import" id="import_file_btn_id" style="cursor: pointer">{% trans 'Импортировать' %}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script>
+        if (debug === 'True') {
+          excelTemplateDownloadUrl = '{{ request.scheme }}://{{ request.get_host }}{% url "organizations:download_template" org_pk=organization.id %}';
+        } else {
+          excelTemplateDownloadUrl = 'https://worktime.kg{% url "organizations:download_template" org_pk=organization.id %}';
+        }
+        const importFileUrl = '{% url "organizations:employees_import" org_pk=organization.id %}'
+    </script>
+    <script src="{% static 'js/utils/cookie.js' %}"></script>
+    <script src="{% static 'js/staff/import_employees.js' %}"></script>
+{% endblock %}

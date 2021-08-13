@@ -1,0 +1,73 @@
+{% extends 'login-base.html' %}
+{% load static staticfiles i18n %}
+
+{% block content %}
+    <div class="body-login-container" id="body-register-container_id"
+         style="background-image: url({% static 'img/jpg/confirmCode.jpg' %})">
+        <div class="login-container">
+            <div class="logo">
+                <img src="{% static 'img/png/лого.png' %}" alt="">
+            </div>
+
+            <!-- phone validation block -->
+            <div id="phone-validation-block">
+                <h2>{% trans 'Регистрация' %}</h2>
+                <p>{% trans 'Для регистрации необходимо пройти аунтентификацию телефонного номера' %}</p>
+                <form>
+                    <div class="password-input">
+                        <label>
+                            <input type="text" placeholder="+996 (000) 00-00-00" id="phone" name="phone" autocomplete="off">
+                        </label>
+                        <p id="phone-valid-error" style="display: none">{% trans 'номер не существует' %}</p>
+                    </div>
+                    <div class="login-button">
+                        <a id="send-button" class="send-button send-form-data">{% trans 'Отправить' %}</a>
+                    </div>
+                    <div class="info">{% trans 'Уже есть аккаунт' %}? <a href="{% url 'users:login' %}">{% trans 'Войти' %}</a></div>
+                </form>
+                <button id="recaptcha" style="display: none"></button>
+            </div>
+
+            <!-- code validation block -->
+            <div id="code-validation-block">
+                <h2>{% trans 'Код подтвержения' %}</h2>
+                <form>
+                    <div class="password-input">
+                        <label>
+                            <input type="text" name="code" class="code" id="code" placeholder="{% trans 'Код подтверждения' %}"
+                                   autocomplete="off" maxlength="25">
+                        </label>
+                        <p id="code-valid-error" style="display: none">{% trans 'неправильный код подтверждения' %}</p>
+                    </div>
+                    <div class="login-button">
+                        <a id="confirm-button" class="send-button">{% trans 'Подтвердить' %}</a>
+                    </div>
+                </form>
+            </div>
+
+            <!-- registration block -->
+            <div id="registation-block">
+                {% include 'components/registration_form.html' %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-analytics.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.17.1/firebase-auth.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script>
+        const registrationEndpoint = '{% url 'users:registration' %}';
+        const registerBackgroundImgUrl = '{% static "img/jpg/img.jpg" %}';
+
+        const phoneInput = document.getElementById('phone');
+        const phoneMask = IMask(phoneInput, {
+          mask: '+{996} (000) 00-00-00',
+          lazy: false,  // make placeholder always visible
+        });
+    </script>
+    <script src="{% static 'js/firebase_config.js' %}"></script>
+    <script src="{% static 'js/firebase_phone_validation.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<div class="tariffs-modal">
+    <div class="modal">
+        <div class="close-modal close-modal-tariffs"></div>
+        <h3>{{ tariff.name }}</h3>
+        <p>{% trans 'Выберите пакет' %}</p>
+        <div class="modal-content">
+            {% for package in packages %}
+                <div class="discount-block" id="{{ package.id }}">
+                    <div class="month">{{ package.month_duration }} {% trans 'месяца' %}</div>
+                    {% if package.discount %}
+                        <div class="sum-old">{{ package.price }} {% trans ' c.' %}</div>
+                        <div class="discount">-{{ package.discount }}%</div>
+                        <div class="discount-sticker">{% trans 'скидка' %}</div>
+                        <div class="sum-new">{{ package.get_discount }}{% trans ' c.' %}</div>
+                    {% else %}
+                        <div class="sum-new">{{ package.price }}{% trans ' c.' %}</div>
+                    {% endif %}
+                    <a href="#" class="tariff-pay-btn">{% trans 'Оплатить' %}</a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>

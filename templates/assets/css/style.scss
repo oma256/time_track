@@ -1,0 +1,29 @@
+@import "./_base";
+
+//====components
+
+@import "components/pagination";
+@import "components/header";
+@import "components/right-header";
+@import "components/datepicker";
+@import "components/report-template";
+
+//====Pages
+
+@import "pages/index";
+@import "pages/main/main-add-staff";
+@import "pages/staff/add__employee";
+@import "pages/staff/import-staff";
+@import "pages/staff/add__staff";
+@import "pages/filial/filial";
+@import "pages/filial/filial-detail";
+@import "pages/filial/add-filial";
+@import "pages/departments/departments-detail";
+@import "pages/settings/settings";
+@import "pages/tariffs";
+@import "pages/reports/reports";
+@import "pages/reports/reports-detail";
+@import "pages/search-result-detail";
+
+
+

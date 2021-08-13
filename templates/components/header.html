@@ -1,0 +1,47 @@
+{% load static staticfiles i18n %}
+
+<div class="left">
+    <div class="left-inner">
+        <div class="logo">
+            <div class="logo-img">
+                <img src="{% static 'img/svg/logo.svg' %}" alt="load img">
+            </div>
+            <div class="button-hide"></div>
+        </div>
+        <div class="menu">
+            <ul>
+                {% with request.resolver_match.url_name as url_name %}
+                    <li class="{% if url_name in 'organizations:main' %}active{% endif %}{% if not employee_exists %}disabled{% endif %} {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="home"></div>
+                        <a class="" href="{% url 'organizations:main' org_pk=organization.id %} {% if not employee_exists %}disabled{% endif %}">{% trans 'Главная' %}</a>
+                    </li>
+                    <li class="{% if url_name in 'organizations:employees_list' or url_name in 'organization:employee_create' or url_name in 'organizations:employees_import' %}active{% endif %}
+                           {% if not employee_exists %}disabled{% endif %} {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="staff"></div>
+                        <a href="{% url 'organizations:employees_list' org_pk=organization.id %}">{% trans 'Сотрудники' %}</a>
+                    </li>
+                    <li class="{% if url_name in 'organizations:filials_list' or url_name in 'organizations:filial_create' or url_name in 'organizations:filial_detail' %}active{% endif %}
+                           {% if setting.location is None %}disabled{% endif %} {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="branches"></div>
+                        <a href="{% url 'organizations:filials_list' org_pk=organization.id %}">{% trans 'Филиалы' %}</a>
+                    </li>
+                    <li class="{% if url_name in 'organizations:departments_list' or url_name in 'organizations:department_create' or url_name in 'organizations:department_detail' %}active{% endif %}
+                           {% if not employee_exists %}disabled{% endif %} {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="departments"></div>
+                        <a href="{% url 'organizations:departments_list' org_pk=organization.id %}">{% trans 'Отделы' %}</a>
+                    </li>
+                    <li class="{% if url_name in 'organizations:reports_list' or url_name in 'organizations:report_detail' %}active{% endif %}
+                           {% if not employee_exists %}disabled{% endif %} {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="reports"></div>
+                        <a href="{% url 'organizations:reports_list' org_pk=organization.id %}">{% trans 'Отчеты' %}</a>
+                    </li>
+                    <li class="{% if url_name in 'organizations:settings' %}active{% endif %}  {% if org_tariff_pkg_is_not_payed %} disabled {% endif %}">
+                        <div class="settings"></div>
+                        <a href="{% url 'organizations:settings' org_pk=organization.id %}">{% trans 'Настройки' %}</a>
+                    </li>
+                {% endwith %}
+            </ul>
+            <div class="border"></div>
+        </div>
+    </div>
+</div>

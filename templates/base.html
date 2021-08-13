@@ -1,0 +1,50 @@
+{% load i18n static staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{% static 'fonts/stylesheet.css' %}" rel="stylesheet">
+    <link href="{% static 'fonts/Roboto/stylesheet.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <title>{% block title %} {% endblock %}</title>
+    <style>
+        .row-green {
+            background: rgba(65, 255, 49, 0.06);
+        }
+
+        .row-red {
+            background: rgba(255, 65, 65, 0.06);
+        }
+
+        .row-green td:first-child span {
+            background: #2DA623;
+        }
+
+        .row-red td:first-child span {
+            background: #F34D4D;
+        }
+    </style>
+    {% block style %}{% endblock %}
+</head>
+<body>
+{% block content %}{% endblock %}
+<script src="{% static 'js/jquery-2.2.4.js' %}"></script>
+<script src="{% static 'js/datepicker.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>
+<script src="{% static 'js/search/global_search.js' %}"></script>
+<script src="{% static 'js/utils/errors.js' %}"></script>
+<script>
+    let debug = '{{ debug }}';
+
+    if (debug === 'True') {
+      globalSearchUsersEndpoint = '{{ request.scheme }}://{{ request.get_host }}{% url "organizations:global_search_users" org_pk=organization.id %}';
+    } else {
+      globalSearchUsersEndpoint = 'https://worktime.kg{% url "organizations:global_search_users" org_pk=organization.id %}';
+    }
+</script>
+{% block script %}{% endblock %}
+
+</body>
+</html>

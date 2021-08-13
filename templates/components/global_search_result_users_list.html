@@ -1,0 +1,7 @@
+{% for user_org in user_orgs %}
+    <div class="result">
+        <div class="name">{{ user_org.user.get_full_name }}</div>
+        <div class="info">{{ user_org.position }}</div>
+        <a href="{% url 'organizations:report_detail' org_pk=org_id user_org_id=user_org.id %}"></a>
+    </div>
+{% endfor %}

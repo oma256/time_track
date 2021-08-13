@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Отчеты' %}{% endblock %}
+
+{% block content %}
+    <main class="reports">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="">
+                <h1>Отчеты</h1>
+                <div class="reports-all">
+                    <div class="reports-calendar">
+                        <form action="">
+                            <div class="form-content">
+                                <div class="input">
+                                    <input name="startDate" style="cursor: pointer" class="start-date" readonly="readonly" id="date_range"
+                                           placeholder="{% trans 'Выберите период' %}">
+                                    <input name="endDate" class="end-date" readonly="readonly">
+                                </div>
+                                <a class="excel" id="download-btn_id" href="#">{% trans 'Скачать Excel всех сотрудников' %}</a>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="reports-content-all">
+                        {% for department in departments %}
+                            <div class="reports-content">
+                                <h2>{{ department.name }}</h2>
+                                {% if department.user_orgs %}
+                                    <div class="reports-table">
+                                        <div class="table-heading">
+                                            <div class="name">{% trans 'Ф.И.О.' %}</div>
+                                            <div class="info">{% trans 'Должность' %}</div>
+                                            <div class="reports-icon">{% trans 'Отчет' %}</div>
+                                        </div>
+                                        {% for user_org in department.user_orgs %}
+                                            <div class="table-content">
+                                                <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                <div class="name">{{ user_org.user.get_full_name }}</div>
+                                                <div class="info">{{ user_org.position }}</div>
+                                                <div class="reports-icon">
+                                                    <div></div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="table_not-staff">{% trans 'В отделе пока нет сотрудников' %}</div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% include 'components/pagination.html' %}
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'js/reports/reports_list.js' %}"></script>
+    <script>
+        $(() => {
+            $.datepicker.setDefaults($.datepicker.regional["ru"]);
+            $('#date_range').datepicker({
+                dateFormat: 'yy-mm-dd',
+                range: 'period',
+                numberOfMonths: 2,
+                showButtonPanel: true,
+                showOtherMonths: true,
+                beforeShow: (input, inst) => {
+                    let cal = inst.dpDiv;
+                    let top = $(input).offset().top + $(input).outerHeight();
+                    setTimeout(() => {
+                        cal.css({
+                            'top': top,
+                        });
+                    }, 10);
+                },
+
+                onSelect: (dateText, inst, extensionRange) => {
+                    $('[name=startDate]').val(extensionRange.startDateText);
+                    $('[name=endDate]').val(extensionRange.endDateText);
+                    startTime = extensionRange.startDateText;
+                    endTime = extensionRange.endDateText;
+                }
+            });
+        });
+        if (debug === 'True') {
+          reportsDownloadUrl = '{{ request.scheme }}://{{ request.get_host }}{% url "organizations:reports_download" org_pk=organization.id %}';
+        } else {
+          reportsDownloadUrl = 'https://worktime.kg{% url "organizations:reports_download" org_pk=organization.id %}';
+        }
+    </script>
+{% endblock %}

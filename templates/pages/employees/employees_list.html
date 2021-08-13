@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n %}
+
+{% block title %}{% trans 'Страница списка сотрудников' %}{% endblock %}
+
+{% block content %}
+    <main class="add__staff">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="table-add-staff__content-all">
+                <div class="table-add-staff__content">
+                    <h1>{% trans 'Сотрудники' %}</h1>
+                    <div class="table_add-staff">
+                        <div class="table_content-all">
+                            <div class="table_content">
+                                {% if user_organizations %}
+                                    <table class="table">
+                                        <tr>
+                                            <th>
+                                                <span>{% trans 'Статус' %}</span>
+                                            </th>
+                                            <th>
+                                                <span>{% trans 'Сотрудник' %}</span>
+                                            </th>
+                                            <th>
+                                                <span>{% trans 'Пришел' %}</span>
+                                            </th>
+                                            <th>
+                                                <span>{% trans 'Ушел' %}</span>
+                                            </th>
+                                            <th>
+                                                <span>{% trans 'Дата' %}</span>
+                                            </th>
+                                        </tr>
+                                        {% for user_org in user_organizations %}
+                                            <tr class="{% if user_org.is_checked %} row-green {% else %} row-red {% endif %}">
+                                                <td>
+                                                    <span></span>
+                                                    <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                </td>
+                                                <td>
+                                                    <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.user.get_full_name }}</span>
+                                                    <div class="info" style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.position }}</div>
+                                                    <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                </td>
+                                                <td>
+                                                    <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %}
+                                                        {{ user_org.last_work_time.start_time|time:'H:i' }} {% endif %}</span>
+                                                    <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                </td>
+                                                <td>
+                                                    <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time.end_time %} -/- {% else %}
+                                                        {{ user_org.last_work_time.end_time|time:'H:i' }} {% endif %}</span>
+                                                    <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                </td>
+                                                <td>
+                                                    <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.last_work_time %} -/- {% else %}
+                                                        {{ user_org.last_work_time.start_time|date:'d.m.y' }}  {% endif %} </span>
+                                                    <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                    {% include 'components/pagination.html' %}
+                                {% else %}
+                                    <div class="table_not-staff">{% trans 'У Вас пока нет сотрудников' %}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="add-staff__button">
+                            <div class="button">
+                                <a href="{% url 'organizations:employee_create' org_pk=organization.id %}"
+                                   class="staff-but">{% trans 'Добавить сотрудника' %}</a>
+                            </div>
+                            <div class="button">
+                                <a href="{% url 'organizations:employees_import' org_pk=organization.id %}"
+                                   class="import-staff">{% trans 'Импортировать сотрудников' %}</a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+
+
+
+
+
+

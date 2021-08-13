@@ -1,0 +1,117 @@
+image: docker:19-dind
+
+services:
+  - docker:19-dind
+
+variables:
+  DOCKER_DRIVER: overlay2
+  TAG: "${CI_COMMIT_SHORT_SHA}"
+  RELEASE_CODE: $CI_COMMIT_SHA
+  GIT_SUBMODULE_STRATEGY: recursive
+  PIP_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/pip"
+  APK_CACHE_DIR: "${CI_PROJECT_DIR}/.cache/apk"
+  IMAGE_NAME: $CI_PROJECT_PATH
+
+cache:
+  paths:
+    - ${PIP_CACHE_DIR}
+    - ${APK_CACHE_DIR}
+
+stages:
+  - build
+  - deploy
+
+.tags-list: &tags-list
+  tags:
+    - linux
+    - docker
+    - shared
+
+.prepare_envs: &prepare_envs
+                 |
+                 if [ ! -z "$CI_REGISTRY" ] && [ "${CI_REGISTRY: -1}" != "/" ]; then
+                 CI_REGISTRY="${CI_REGISTRY}/"
+                 echo "Set CI_REGISTRY to ${CI_REGISTRY}"
+                 fi;
+
+.install_common_deps: &install_base_deps
+                        |
+                        apk add --cache-dir ${APK_CACHE_DIR} python3-dev \
+                        libffi-dev openssl-dev gcc libc-dev make py3-pip gettext
+
+.install_compose: &install_compose
+                    |
+                    apk add --cache-dir ${APK_CACHE_DIR} libsodium-dev
+                    SODIUM_INSTALL=system pip3 install docker-compose
+
+.set_env_files: &set_env_files
+  - echo "Set CI/CD variables to ENV files..."
+  - envsubst < ./envs/postgres.template > ./envs/postgres.env
+  - envsubst < ./envs/backend.template > ./envs/backend.env
+  - envsubst < ./envs/minio.template > ./envs/minio.env
+  - envsubst < ./envs/paybox.template > ./envs/paybox.env
+
+.build_for_kg: &build_for_kg
+  - echo "Building ${IMAGE_NAME}:${TAG}"
+  - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+  - |
+    docker-compose build
+  - |
+    if [ ! -z "$CI_REGISTRY" ]; then
+    export IMAGE="${CI_REGISTRY_IMAGE}:${TAG}"
+    echo "Pushing ${IMAGE}"
+    echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    docker-compose push
+    fi
+
+build:
+  stage: build
+  <<: *tags-list
+  only:
+    - merge_requests
+    - dev
+    - master
+  environment:
+    name: development
+  variables:
+    ENVIRONMENT: $CI_ENVIRONMENT_SLUG
+  before_script:
+    - *prepare_envs
+    - *install_base_deps
+    - *install_compose
+  script:
+    - *set_env_files
+    - *build_for_kg
+
+deploy:
+  stage: deploy
+  <<: *tags-list
+  only:
+    - master
+  environment:
+    name: worktime
+  variables:
+    DOCKER_TLS_VERIFY: 1
+    DOCKER_HOST: tcp://$CI_DOCKER_HOST:2376
+  before_script:
+    - *prepare_envs
+    - *install_base_deps
+    - *install_compose
+  script:
+    - echo "Copy TLS certifactes"
+    - mkdir -p ~/.docker/
+    - cp $TLS_CA ~/.docker/ca.pem
+    - cp $TLS_KEY ~/.docker/key.pem
+    - cp $TLS_CERT ~/.docker/cert.pem
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+
+    - echo "Copy configs..."
+    - *set_env_files
+
+    - echo "Pulling ${CI_REGISTRY_IMAGE}:${TAG}"
+    - docker-compose pull
+
+    - echo "Restart docker containers"
+    - docker-compose up -d --force-recreate
+    - make migrate
+    - make messages

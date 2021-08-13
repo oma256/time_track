@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static staticfiles i18n tz %}
+
+{% block title %}{% trans  'Детальная страница отдела' %}{% endblock %}
+
+{% block content %}
+    <main class="departments-detail">
+        {% include 'components/header.html' %}
+        <div class="right">
+            {% include 'components/right-header.html' %}
+            <div class="table-add-staff__content-all">
+                <div class="table-add-staff__content">
+                    <div class="table_add-staff">
+                        <div class="table_content-all">
+                            <div class="table_content">
+                                <h2>{{ department.name }}</h2>
+                                <div class="departments-detail__statistic">
+                                    <h4>{% trans 'За последний месяц' %}</h4>
+                                    <div class="tardiness-scale">
+                                        <div class="green"></div>
+                                        <div class="red"></div>
+                                    </div>
+                                    <div class="num-delays__all">
+                                        <div class="number">
+                                            <div class="num">
+                                                {% trans 'Вовремя' %}
+                                                <div>
+                                                    <input class="green-value" readonly="readonly" type="text"
+                                                           value="{{ late_agg.not_late }}">
+                                                    <div class="input-buffer"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="number">
+                                            <div class="num">
+                                                {% trans 'Опозданий' %}
+                                                <div>
+                                                    <input class="red-value" readonly="readonly" type="text"
+                                                           value="{{ late_agg.late }}">
+                                                    <div class="input-buffer"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <th>
+                                            <span>{% trans 'Статус' %}</span>
+                                        </th>
+                                        <th>
+                                            <span>{% trans 'Сотрудник' %}</span>
+                                        </th>
+                                        <th>
+                                            <span>{% trans 'Пришел' %}</span>
+                                        </th>
+                                        <th>
+                                            <span>{% trans 'Ушел' %}</span>
+                                        </th>
+                                        <th>
+                                            <span>{% trans 'Дата' %}</span>
+                                        </th>
+                                    </tr>
+                                    {% for user_org in department.userorganization_set.all %}
+                                        <tr class="{% if user_org.is_checked %}row-green{% else %}row-red{% endif %}">
+                                            <td>
+                                                <span></span>
+                                                <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                            </td>
+                                            <td>
+                                                <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.user.get_full_name }}</span>
+                                                <div class="info" style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{{ user_org.position }}</div>
+                                                 <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                            </td>
+                                            <td>
+                                                <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.work_times.last %} -/- {% else %} {{ user_org.work_times.last.start_time|time:'H:i' }} {% endif %}</span>
+                                                 <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                            </td>
+                                            <td>
+                                                <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.work_times.last.end_time %} -/- {% else %} {{ user_org.work_times.last.end_time|time:'H:i' }} {% endif %}</span>
+                                                 <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                            </td>
+                                            <td>
+                                                <span style="{% if user_org.last_work_time.is_late %} color: red; {% endif %}">{% if not user_org.work_times.last %} -/- {% else %} {{ user_org.work_times.last.start_time|date:'d.m.y' }} {% endif %}</span>
+                                                 <a href="{% url 'organizations:report_detail' org_pk=organization.id user_org_id=user_org.id %}"></a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(() => {
+
+            let greenValue = $(".departments-detail__statistic .green-value").val();
+            let inputWidth = $(".departments-detail__statistic input");
+            let redValue = $(".departments-detail__statistic .red-value").val();
+            let redColor = $(".departments-detail__statistic .red");
+            let greenColor = $(".departments-detail__statistic .green");
+
+            let sum = (100 / (parseInt(greenValue) + parseInt(redValue)) * parseInt(redValue));
+            let sum2 = (100 / (parseInt(greenValue) + parseInt(redValue)) * parseInt(greenValue));
+
+            redColor.css("width", sum + '%');
+            greenColor.css("width", sum2 + '%');
+
+            inputWidth.each((i, obj) => {
+                $(obj).css("width", ($(obj).val().length) * 11)
+            })
+        })
+    </script>
+{% endblock %}

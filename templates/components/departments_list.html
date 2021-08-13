@@ -1,0 +1,6 @@
+{% for department in departments %}
+    <div class="radio" id="{{ department.id }}">
+        <input type="radio" id="radio-two{{ department.id }}" name="radio-two">
+        <label for="radio-two{{ department.id }}">{{ department.name }}</label>
+    </div>
+{% endfor %}
